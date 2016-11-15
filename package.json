@@ -1,0 +1,25 @@
+{
+  "name": "personal_finances",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/express": "^4.0.33",
+    "express": "^4.14.0",
+    "express-myconnection": "^1.0.4",
+    "mysql": "^2.12.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.9",
+    "typings": "^2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite": "lite-server",
+    "tsc:w": "tsc -w",
+    "start": "npm run tsc:w",
+    "typings": "typings"
+  },
+  "author": "",
+  "license": "ISC"
+}
