@@ -1,4 +1,6 @@
 import {ContaDao} from '../dao/conta-dao';
+import {ResponseProvider} from '../util/response-provider';
+import {Request, Response} from 'express';
 
 export class ContaService {
     private dao: ContaDao;
@@ -7,10 +9,7 @@ export class ContaService {
         this.dao = dao;
     }
 
-    todas(request: any, response: any) {
-        this.dao
-            .todas
-            .then((result: any) => response.json(result))
-            .catch((error: any) => response.json(error));
+    todas(request: Request, response: Response) {
+        return new ResponseProvider(response, this.dao.todas);
     }
 }

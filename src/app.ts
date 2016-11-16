@@ -6,9 +6,13 @@ import {historicoService} from './factory/historico-service-factory';
 let port: number = 3001;
 let app = express();
 
+//categorias
 app.get('/api/v1/categorias', (req, res) => categoriaService.todas(req, res));
+
+//contas
 app.get('/api/v1/contas', (req, res) => contaService.todas(req, res));
 
+//historicos
 app.get('/api/v1/historicos', (req, res) => historicoService.todos(req, res));
 app.get('/api/v1/historicos/filtro', (req, res) => historicoService.filtro(req, res));
 

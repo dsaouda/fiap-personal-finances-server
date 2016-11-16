@@ -1,4 +1,7 @@
 import {CategoriaDao} from '../dao/categoria-dao';
+import {Categoria} from '../model/categoria';
+import {ResponseProvider} from '../util/response-provider';
+import {Request, Response} from 'express';
 
 export class CategoriaService {
     private dao: CategoriaDao;
@@ -7,10 +10,15 @@ export class CategoriaService {
         this.dao = categoriaDao;
     }
 
-    todas(request: any, response: any) {
-        this.dao
-            .todas
-            .then((result: any) => response.json(result))
-            .catch((error: any) => response.json(error));
+    todas(request: Request, response: Response) {
+        let categoria = new Categoria();
+        categoria.setId(1);
+        categoria.setNome('ABC');
+        categoria.setDescricao('DEF');
+        categoria.setRecorrente(true);
+
+        //this.dao.save(categoria);
+
+        return new ResponseProvider(response, this.dao.todas);
     }
 }
