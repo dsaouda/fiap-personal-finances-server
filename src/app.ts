@@ -7,13 +7,13 @@ import {historicoService} from './factory/historico-service-factory';
 
 let port: number = 3001;
 let app = express();
-let baseUri = (uri: string) => {
+let baseUri = (uri: string): string => {
     return `/api/v1/${uri}`;
 };
 
 //categorias
 //app.get('/api/v1/categorias', (req, res) => categoriaService.todas(req, res));
-app.route('/api/v1/categorias')
+app.route(baseUri('categorias'))
     .get((req, res) => categoriaService.todas(req, res));
 
 //contas
