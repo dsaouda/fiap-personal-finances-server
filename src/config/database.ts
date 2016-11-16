@@ -1,7 +1,7 @@
 export const config = {
-    username: "root",
-    password: "dsaouda",
-    hostname: "192.168.33.10",
-    port: 3306,
-    database: 'fiap_gastos'
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    hostname: process.env.DB_HOSTNAME,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME
 };

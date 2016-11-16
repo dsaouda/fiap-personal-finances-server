@@ -1,10 +1,17 @@
 export class ObjectConverter {
 
     static fromJson(obj: Object, data: Object) {
-        for(let name in data) {
+        let name: string;
+        for(name in data) {
 
             let value: string = data[name];
-            let method: string = 'set' + name;
+            //primeira letra em upper case
+            let field = name.substr(0, 1).toUpperCase() + name.substr(1);
+            let method: string = 'set' + field;
+
+            if (obj[method] === undefined) {
+                continue;
+            }
 
             obj[method](value);
         }

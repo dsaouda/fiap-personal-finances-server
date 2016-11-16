@@ -11,14 +11,6 @@ export class CategoriaService {
     }
 
     todas(request: Request, response: Response) {
-        let categoria = new Categoria();
-        categoria.setId(1);
-        categoria.setNome('ABC');
-        categoria.setDescricao('DEF');
-        categoria.setRecorrente(true);
-
-        //this.dao.save(categoria);
-
         return new ResponseProvider(response, this.dao.todas);
     }
 }

@@ -1,3 +1,5 @@
+require('../.env.js');
+
 import * as express from 'express';
 import {categoriaService} from './factory/categoria-service-factory';
 import {contaService} from './factory/conta-service-factory';
@@ -5,9 +7,14 @@ import {historicoService} from './factory/historico-service-factory';
 
 let port: number = 3001;
 let app = express();
+let baseUri = (uri: string) => {
+    return `/api/v1/${uri}`;
+};
 
 //categorias
-app.get('/api/v1/categorias', (req, res) => categoriaService.todas(req, res));
+//app.get('/api/v1/categorias', (req, res) => categoriaService.todas(req, res));
+app.route('/api/v1/categorias')
+    .get((req, res) => categoriaService.todas(req, res));
 
 //contas
 app.get('/api/v1/contas', (req, res) => contaService.todas(req, res));
