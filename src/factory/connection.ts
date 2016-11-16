@@ -9,5 +9,15 @@ const conn = mysql.createConnection({
     database: config.database
 });
 
+conn.config.queryFormat = function (query, values) {
+  if (!values) return query;
+  return query.replace(/\:(\w+)/g, function (txt: string, key: string) {
+    if (values.hasOwnProperty(key)) {
+      return this.escape(values[key]);
+    }
+    return txt;
+  }.bind(this));
+};
+
 conn.connect();
 export = conn;

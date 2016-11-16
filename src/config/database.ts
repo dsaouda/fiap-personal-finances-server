@@ -1,7 +1,7 @@
 export const config = {
     username: "root",
     password: "dsaouda",
-    hostname: "192.168.99.100",
+    hostname: "192.168.33.10",
     port: 3306,
-    database: 'personal_finances'
+    database: 'fiap_gastos'
 };
