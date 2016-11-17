@@ -3,6 +3,10 @@ import {IConnection, IError} from 'mysql';
 export abstract class AbstractDao {
     constructor(protected conn: IConnection) {}
 
+    protected find(tableName: string, id: number) {
+        return this.query(`SELECT * FROM ${tableName} WHERE id = :id`, {id: id});
+    }
+
     protected update (tableName: string, object: any, where: Object) {
         let stmt: Array<any> = this.extractStmtUpdateParams(object);
         let stmtWhere: Array<any> = this.extractStmtWhereParams(where);
@@ -13,18 +17,15 @@ export abstract class AbstractDao {
 
     protected insert (tableName: string, object: any) {
         let fields: Array<any> = [];
-        let values: Array<any> = [];
         let stmt: Array<any> = [];
 
         for(let key in object) {
             fields.push(key);
             stmt.push(':' + key);
-            values.push(object[key]);
         }
 
         let sql = `INSERT INTO ${tableName} (${fields.join(', ')}) VALUES (${stmt.join(',')})`;
-
-        return this.execute(sql, values, object);
+        return this.execute(sql, object, object);
     }
 
     protected query(sql: string, params?: Object, conversor?: Function) {

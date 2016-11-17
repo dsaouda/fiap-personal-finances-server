@@ -6,9 +6,9 @@ export class ResponseProvider {
         code = code ? code : 200;
 
         promise
-            .then((result: any) => {                
-                response.status(200).json({
-                    code: 200,
+            .then((result: any) => {
+                response.status(code).json({
+                    code: code,
                     result: result
                 })
             })

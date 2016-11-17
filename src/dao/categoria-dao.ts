@@ -4,6 +4,10 @@ import {ObjectConverter} from '../util/object-converter';
 
 export class CategoriaDao extends AbstractDao {
 
+    buscar(id: number) {
+        return this.find('categoria', id);
+    }
+
     save(categoria: Categoria): any {
 
         if (categoria.getId() > 0) {

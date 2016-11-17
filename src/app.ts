@@ -1,6 +1,7 @@
 require('../.env.js');
 
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import {categoriaService} from './factory/categoria-service-factory';
 import {contaService} from './factory/conta-service-factory';
 import {historicoService} from './factory/historico-service-factory';
@@ -11,10 +12,23 @@ let baseUri = (uri: string): string => {
     return `/api/v1/${uri}`;
 };
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 //categorias
-//app.get('/api/v1/categorias', (req, res) => categoriaService.todas(req, res));
 app.route(baseUri('categorias'))
-    .get((req, res) => categoriaService.todas(req, res));
+    //o bind diz para o this de categoriaService é o próprio categoriaService
+    //.get(categoriaService.todas.bind(categoriaService));
+
+    //assim não precisa user o bind
+    .get((req, res) => categoriaService.todas(req, res))
+    .post((req, res) => categoriaService.cadastrar(req, res));
+
+app.route(baseUri('categorias/:id'))
+    .get((req, res) => categoriaService.buscar(req, res))
+    .put((req, res) => categoriaService.atualizar(req, res))
+    .delete((req, res) => categoriaService.deletar(req, res));
+
 
 //contas
 app.get('/api/v1/contas', (req, res) => contaService.todas(req, res));
