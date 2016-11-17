@@ -3,6 +3,7 @@ import {Categoria} from '../model/categoria';
 import {ResponseProvider} from '../util/response-provider';
 import {Request, Response} from 'express';
 import {ObjectConverter} from '../util/object-converter';
+import {Uri} from '../util/uri';
 
 export class CategoriaService {
     private dao: CategoriaDao;
@@ -18,18 +19,38 @@ export class CategoriaService {
     cadastrar(request: Request, response: Response) {
         let body = request.body;
         delete body.id;
-        
+
         let categoria = <Categoria> ObjectConverter.fromJson(new Categoria(), body);
 
-        return new ResponseProvider(
-            response,
-            this.dao.save(categoria),
-            201
-        );
+        this.dao.save(categoria)
+            .then((result: any) => {
+                response.status(201);
+                response.setHeader('Location', Uri.base(`/categorias/${result.id}`))
+                response.send();
+            })
+            .catch((error: any) => {
+                response.status(400).json(error);
+            });
     }
 
     atualizar(request: Request, response: Response) {
-        return new ResponseProvider(response, this.dao.todas);
+        let body = request.body;
+        delete body.id;
+
+        let categoria = <Categoria> ObjectConverter.fromJson(new Categoria(), body);
+        categoria.setId(request.params.id);
+
+        this.dao.buscar(categoria.getId())
+            .then((result: any) => {
+                if (Object.keys(result).length === 0) {
+                    return response.status(404).json({message: 'Categoria não encontrada!'});
+                }
+
+                return new ResponseProvider(
+                    response,
+                    this.dao.save(categoria)
+                );
+            });
     }
 
     buscar(request: Request, response: Response) {
@@ -40,6 +61,18 @@ export class CategoriaService {
     }
 
     deletar(request: Request, response: Response) {
-        return new ResponseProvider(response, this.dao.todas);
+        let id: number = Number(request.params.id);
+
+        this.dao.buscar(id)
+            .then((result: any) => {
+                if (Object.keys(result).length === 0) {
+                    return response.status(404).json({message: 'Categoria não encontrada!'});
+                }
+
+                this.dao.deletar(id).then(
+                    (result: any) => {
+                        response.status(200).send();
+                    });
+            });
     }
 }

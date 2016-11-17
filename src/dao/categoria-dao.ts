@@ -8,6 +8,10 @@ export class CategoriaDao extends AbstractDao {
         return this.find('categoria', id);
     }
 
+    deletar(id: number) {
+        return this.delete('categoria', id);
+    }
+
     save(categoria: Categoria): any {
 
         if (categoria.getId() > 0) {

@@ -3,6 +3,11 @@ import {IConnection, IError} from 'mysql';
 export abstract class AbstractDao {
     constructor(protected conn: IConnection) {}
 
+    protected delete(tableName: string, id: number) {
+        let sql: string = `DELETE FROM ${tableName} WHERE id = :id`;
+        return this.execute(sql, { id: id });
+    }
+
     protected find(tableName: string, id: number) {
         return this.query(`SELECT * FROM ${tableName} WHERE id = :id`, {id: id});
     }
@@ -12,7 +17,7 @@ export abstract class AbstractDao {
         let stmtWhere: Array<any> = this.extractStmtWhereParams(where);
         let sql = `UPDATE ${tableName} SET ${stmt.join(', ')} WHERE ${stmtWhere.join(' AND ')}`;
 
-        return this.execute(sql, object, object);
+        return this.execute(sql, object);
     }
 
     protected insert (tableName: string, object: any) {
@@ -25,7 +30,7 @@ export abstract class AbstractDao {
         }
 
         let sql = `INSERT INTO ${tableName} (${fields.join(', ')}) VALUES (${stmt.join(',')})`;
-        return this.execute(sql, object, object);
+        return this.execute(sql, object);
     }
 
     protected query(sql: string, params?: Object, conversor?: Function) {
@@ -83,18 +88,20 @@ export abstract class AbstractDao {
         return values;
     }
 
-    private execute(sql: string, values: any, object: any) {
+    private execute(sql: string, object: any) {
         return new Promise( (resolve, reject) => {
-            this.conn.query(sql, values, (error, result) => {
+            this.conn.query(sql, object, (error, result) => {
                 if (error) {
                     reject(error);
                     return ;
                 }
 
-                object.id = result.insertId;
+                if (result.insertId) {
+                    object.id = result.insertId;
+                }
+
                 resolve(object);
             });
         });
     }
-
 }
