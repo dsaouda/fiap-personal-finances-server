@@ -3,24 +3,7 @@ import {Categoria} from '../model/categoria';
 import {ObjectConverter} from '../util/object-converter';
 
 export class CategoriaDao extends AbstractDao {
-
-    buscar(id: number) {
-        return this.find('categoria', id);
-    }
-
-    deletar(id: number) {
-        return this.delete('categoria', id);
-    }
-
-    save(categoria: Categoria): any {
-
-        if (categoria.getId() > 0) {
-            return this.update('categoria', categoria, {id: categoria.getId()});
-        }
-
-        return this.insert('categoria', categoria);
-    }
-
+    protected _tableName = 'categoria';
 
     get todas() {
         let sql = `

@@ -15,6 +15,12 @@ let baseUri = (uri: string): string => {
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    console.log(req.originalUrl);
+    console.log('requisição', Date.now());
+    next();
+});
+
 //categorias
 app.route(baseUri('categorias'))
     //o bind diz para o this de categoriaService é o próprio categoriaService
@@ -48,11 +54,7 @@ app.route(baseUri('historicos'))
 app.route(baseUri('historicos/:id'))
     .get((req, res) => historicoService.buscar(req, res))
     .put((req, res) => historicoService.atualizar(req, res))
+    .patch((req, res) => historicoService.atualizar(req, res))
     .delete((req, res) => historicoService.deletar(req, res));
-
-//app.get('/api/v1/historicos', (req, res) => historicoService.todos(req, res));
-//app.get('/api/v1/historicos/filtro', (req, res) => historicoService.filtro(req, res));
-
-
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port} ...`));

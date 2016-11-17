@@ -1,7 +1,26 @@
 import {IConnection, IError} from 'mysql';
 
 export abstract class AbstractDao {
+    protected _tableName: string;
+
     constructor(protected conn: IConnection) {}
+
+    buscar(id: number) {
+        return this.find(this._tableName, id);
+    }
+
+    deletar(id: number) {
+        return this.delete(this._tableName, id);
+    }
+
+    save(obj: any): any {
+
+        if (obj.getId() > 0) {
+            return this.update(this._tableName, obj, {id: obj.getId()});
+        }
+
+        return this.insert(this._tableName, obj);
+    }
 
     protected delete(tableName: string, id: number) {
         let sql: string = `DELETE FROM ${tableName} WHERE id = :id`;
@@ -89,6 +108,10 @@ export abstract class AbstractDao {
     }
 
     private execute(sql: string, object: any) {
+        console.log(sql);
+        console.log(object);
+        console.log("\n\n");
+
         return new Promise( (resolve, reject) => {
             this.conn.query(sql, object, (error, result) => {
                 if (error) {
