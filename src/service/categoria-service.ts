@@ -26,7 +26,7 @@ export class CategoriaService {
             .then((result: any) => {
                 response.status(201);
                 response.setHeader('Location', Uri.base(`/categorias/${result.id}`))
-                response.send();
+                response.json(result);
             })
             .catch((error: any) => {
                 response.status(400).json(error);
@@ -54,10 +54,15 @@ export class CategoriaService {
     }
 
     buscar(request: Request, response: Response) {
-        return new ResponseProvider(
-            response,
-            this.dao.buscar(request.params.id)
-        );
+
+        this.dao.buscar(request.params.id)
+            .then((result: any) => {
+                if (Object.keys(result).length === 0) {
+                    return response.status(404).json({message: 'Categoria não encontrada!'});
+                }
+
+                return response.status(200).json(ObjectConverter.fromJson(new Categoria(), result[0]));
+            });
     }
 
     deletar(request: Request, response: Response) {
@@ -69,10 +74,9 @@ export class CategoriaService {
                     return response.status(404).json({message: 'Categoria não encontrada!'});
                 }
 
-                this.dao.deletar(id).then(
-                    (result: any) => {
-                        response.status(200).send();
-                    });
+                this.dao.deletar(id).then((result: any) => {
+                    response.status(200).send();
+                });
             });
     }
 }

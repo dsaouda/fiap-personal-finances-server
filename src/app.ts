@@ -31,7 +31,14 @@ app.route(baseUri('categorias/:id'))
 
 
 //contas
-app.get('/api/v1/contas', (req, res) => contaService.todas(req, res));
+app.route(baseUri('contas'))
+    .get((req, res) => contaService.todas(req, res))
+    .post((req, res) => contaService.cadastrar(req, res));
+
+app.route(baseUri('contas/:id'))
+    .get((req, res) => contaService.buscar(req, res))
+    .put((req, res) => contaService.atualizar(req, res))
+    .delete((req, res) => contaService.deletar(req, res));
 
 //historicos
 app.get('/api/v1/historicos', (req, res) => historicoService.todos(req, res));

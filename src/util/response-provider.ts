@@ -7,13 +7,10 @@ export class ResponseProvider {
 
         promise
             .then((result: any) => {
-                response.status(code).json({
-                    code: code,
-                    result: result
-                })
+                response.status(code).json(result)
             })
             .catch((error: any) => {
-                response.status(500).json({code: 500, error: error})
+                response.status(500).json(error)
             });
     }
 }

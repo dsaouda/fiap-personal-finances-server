@@ -10,27 +10,27 @@ export class Categoria  {
     }
 
     setId(id: number): Categoria {
-        this.id = Number(id);
+       this.id = Number(id);
         return this;
     }
 
     setNome(nome: string): Categoria {
-        this.nome = nome;
+       this.nome = nome;
         return this;
     }
 
     setDescricao(descricao: string): Categoria {
-        this.descricao = descricao;
+       this.descricao = descricao;
         return this;
     }
 
     setRecorrente(recorrente: boolean): Categoria {
-        this.recorrente = Boolean(recorrente);
+       this.recorrente = Boolean(recorrente);
         return this;
     }
 
     setIcone(icone: string): Categoria {
-        this.icone = icone;
+       this.icone = icone;
         return this;
     }
 }
