@@ -15,4 +15,14 @@ export class DateConverter {
             return new Date(year, month, day);
         }
 
+        static toIsoDate(date): string {
+
+            if (date instanceof Date) {
+                return `${date.getFullYear()}-${DateConverter.pad(date.getUTCMonth())}-${DateConverter.pad(date.getDay())}`;
+            }
+
+            return date;
+        }
+
+        private static pad(n){return n<10 ? '0'+n : n}
 }

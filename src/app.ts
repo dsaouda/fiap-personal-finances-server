@@ -41,8 +41,17 @@ app.route(baseUri('contas/:id'))
     .delete((req, res) => contaService.deletar(req, res));
 
 //historicos
-app.get('/api/v1/historicos', (req, res) => historicoService.todos(req, res));
-app.get('/api/v1/historicos/filtro', (req, res) => historicoService.filtro(req, res));
+app.route(baseUri('historicos'))
+    .get((req, res) => historicoService.todos(req, res))
+    .post((req, res) => historicoService.cadastrar(req, res));
+
+app.route(baseUri('historicos/:id'))
+    .get((req, res) => historicoService.buscar(req, res))
+    .put((req, res) => historicoService.atualizar(req, res))
+    .delete((req, res) => historicoService.deletar(req, res));
+
+//app.get('/api/v1/historicos', (req, res) => historicoService.todos(req, res));
+//app.get('/api/v1/historicos/filtro', (req, res) => historicoService.filtro(req, res));
 
 
 
