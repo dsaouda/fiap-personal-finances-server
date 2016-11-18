@@ -48,14 +48,34 @@ export class HistoricoService {
             });
     }
 
+    mudarStatus(request: Request, response: Response) {
+        let status: string = request.body.status;
+        let id: number = request.params.id;
+
+        this.buscarHistorico(response, id, (historico: Historico) => {
+            historico.setStatus(status);
+            
+            this.dao.save(historico).then((historico) => {
+
+                response.status(200);
+                response.json(historico);
+
+            }).catch((error: any) => {
+                response.status(400).json(error);
+            });
+
+        });
+
+    }
+
     atualizar(request: Request, response: Response) {
         let body = request.body;
         delete body.id;
 
-        let categoria = <Historico> ObjectConverter.fromJson(new Historico(), body);
-        categoria.setId(request.params.id);
+        let historico = <Historico> ObjectConverter.fromJson(new Historico(), body);
+        historico.setId(request.params.id);
 
-        this.dao.buscar(categoria.getId())
+        this.dao.buscar(historico.getId())
             .then((result: any) => {
                 if (Object.keys(result).length === 0) {
                     return response.status(404).json({message: 'Historico não encontrada!'});
@@ -63,7 +83,7 @@ export class HistoricoService {
 
                 return new ResponseProvider(
                     response,
-                    this.dao.save(categoria)
+                    this.dao.save(historico)
                 );
             });
     }
@@ -96,6 +116,18 @@ export class HistoricoService {
                 this.dao.deletar(id).then((result: any) => {
                     response.status(200).send();
                 });
+            });
+    }
+
+    private buscarHistorico(response: Response, id: number, callback: Function) {
+        this.dao.buscar(id)
+            .then((result: any) => {
+                if (Object.keys(result).length === 0) {
+                    return response.status(404).json({message: 'Historico não encontrado!'});
+                }
+
+                let historico = <Historico> ObjectConverter.fromJson(new Historico(), result);
+                callback(historico);
             });
     }
 }

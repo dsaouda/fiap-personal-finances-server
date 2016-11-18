@@ -54,7 +54,7 @@ app.route(baseUri('historicos'))
 app.route(baseUri('historicos/:id'))
     .get((req, res) => historicoService.buscar(req, res))
     .put((req, res) => historicoService.atualizar(req, res))
-    .patch((req, res) => historicoService.atualizar(req, res))
+    .patch((req, res) => historicoService.mudarStatus(req, res))
     .delete((req, res) => historicoService.deletar(req, res));
 
 app.listen(port, () => console.log(`Servidor rodando na porta ${port} ...`));

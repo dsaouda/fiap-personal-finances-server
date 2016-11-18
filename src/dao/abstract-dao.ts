@@ -6,14 +6,24 @@ export abstract class AbstractDao {
     constructor(protected conn: IConnection) {}
 
     buscar(id: number) {
-        return this.find(this._tableName, id);
+
+        return new Promise( (resolve, reject) => {
+            this.find(this._tableName, id).then((results: Array<any>) => { 
+                let result = results.length > 0 ? results.shift() : {};
+                resolve(result);
+
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+        
     }
 
     deletar(id: number) {
         return this.delete(this._tableName, id);
     }
 
-    save(obj: any): any {
+    save(obj: any) {
 
         if (obj.getId() > 0) {
             return this.update(this._tableName, obj, {id: obj.getId()});
