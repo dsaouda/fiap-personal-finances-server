@@ -89,6 +89,10 @@ export class HistoricoService {
                     return response.status(404).json({message: 'Historico não encontrada!'});
                 }
 
+                if (result.status === 'P') {
+                    return response.status(412).json({message: 'Histórico já foi dado baixa, por isso não pode ser deletado.'});
+                }
+
                 this.dao.deletar(id).then((result: any) => {
                     response.status(200).send();
                 });
