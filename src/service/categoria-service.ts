@@ -61,7 +61,7 @@ export class CategoriaService {
                     return response.status(404).json({message: 'Categoria não encontrada!'});
                 }
 
-                return response.status(200).json(ObjectConverter.fromJson(new Categoria(), result[0]));
+                return response.status(200).json(ObjectConverter.fromJson(new Categoria(), result));
             });
     }
 

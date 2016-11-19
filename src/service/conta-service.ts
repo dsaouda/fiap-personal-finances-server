@@ -61,7 +61,7 @@ export class ContaService {
                     return response.status(404).json({message: 'Conta não encontrada!'});
                 }
 
-                return response.status(200).json(ObjectConverter.fromJson(new Conta(), result[0]));
+                return response.status(200).json(ObjectConverter.fromJson(new Conta(), result));
             });
     }
 
@@ -76,7 +76,7 @@ export class ContaService {
 
                 this.dao.deletar(id).then((result: any) => {
                     response.status(200).send();
-                });
+                }).catch(error => response.status(500).json(error));
             });
     }
 }

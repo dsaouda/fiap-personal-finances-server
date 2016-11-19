@@ -5,13 +5,16 @@ import * as bodyParser from 'body-parser';
 import {categoriaService} from './factory/categoria-service-factory';
 import {contaService} from './factory/conta-service-factory';
 import {historicoService} from './factory/historico-service-factory';
+let cors = require('cors')
 
 let port = process.env.EXPRESS_PORT || 3000;
 let app = express();
+
 let baseUri = (uri: string): string => {
     return `/api/v1/${uri}`;
 };
 
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 

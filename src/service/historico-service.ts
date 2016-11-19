@@ -96,7 +96,7 @@ export class HistoricoService {
                     return response.status(404).json({message: 'Historico não encontrada!'});
                 }
 
-                return response.status(200).json(ObjectConverter.fromJson(new Historico(), result[0]));
+                return response.status(200).json(ObjectConverter.fromJson(new Historico(), result));
             });
     }
 
