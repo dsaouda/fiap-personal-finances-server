@@ -18,11 +18,13 @@ export class DateConverter {
         static toIsoDate(date): string {
 
             if (date instanceof Date) {
-                return `${date.getFullYear()}-${DateConverter.pad(date.getUTCMonth())}-${DateConverter.pad(date.getDay())}`;
+                return `${date.getFullYear()}-${DateConverter.pad(date.getMonth()+1)}-${DateConverter.pad(date.getDate())}`;
             }
 
             return date;
         }
 
-        private static pad(n){return n<10 ? '0'+n : n}
+        private static pad(n){
+            return n<10 ? '0'+n : n
+        }
 }

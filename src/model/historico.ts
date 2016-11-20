@@ -4,7 +4,9 @@ export class Historico  {
 
     private id: number;
     private conta_id: number;
+    private conta_nome: string;
     private categoria_id: number;
+    private categoria_nome: string;
     private docto: string;
     private data_movimento: string;
     private data_vencimento: string;
@@ -15,6 +17,14 @@ export class Historico  {
 
     getId(): number {
         return this.id;
+    }
+
+    getContaId(): number {
+        return this.conta_id;
+    }
+
+    getValor(): number {
+        return this.valor;
     }
 
     setId(id: number): this {
@@ -32,8 +42,18 @@ export class Historico  {
         return this;
     }
 
+    setContaNome(nome: string): this {
+        this.conta_nome = nome;
+        return this;
+    }
+
     setCategoriaId(id: number): this {
         this.categoria_id = id;
+        return this;
+    }
+
+    setCategoriaNome(nome: string): this {
+        this.categoria_nome = nome;
         return this;
     }
 

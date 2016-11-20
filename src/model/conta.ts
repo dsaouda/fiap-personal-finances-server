@@ -5,6 +5,14 @@ export class Conta  {
     private saldo: number;
     private cor: string;
 
+    efetivarDebitoOuCredito(valor: number) {
+        this.saldo += valor;
+    }
+
+    devolverDebitoOuCredito(valor: number) {
+        this.saldo -= valor;
+    }
+
     getId(): number {
         return this.id;
     }

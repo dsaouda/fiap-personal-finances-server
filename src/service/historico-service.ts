@@ -1,31 +1,36 @@
 import {HistoricoDao} from '../dao/historico-dao';
+import {ContaDao} from '../dao/conta-dao';
 import {Historico} from '../model/historico';
+import {Conta} from '../model/conta';
 import {ResponseProvider} from '../util/response-provider';
 import {Request, Response} from 'express';
 import {ObjectConverter} from '../util/object-converter';
-import {DateConverter} from '../util/date-converter';
 import {Uri} from '../util/uri';
 
 export class HistoricoService {
     private dao: HistoricoDao;
+    private contaDao: ContaDao;
 
-    constructor(categoriaDao: HistoricoDao) {
-        this.dao = categoriaDao;
+    constructor(historicoDao: HistoricoDao, contaDao: ContaDao) {
+        this.dao = historicoDao;
+        this.contaDao = contaDao;
     }
 
     todos(request: Request, response: Response) {
 
         let query = request.query;
-
-        if (JSON.stringify(query) == '{}') {
-            return new ResponseProvider(response, this.dao.todos);
+        if (query.contaId == 0) {
+            delete query.contaId;
         }
 
-        let from = DateConverter.toDate(query.from);
-        let to = DateConverter.toDate(query.to);
-        let contaId: number = query.conta_id;
+        if (JSON.stringify(query) == '{}') {
+            response.status(400).json("Informe um filtro");
+            return ;
+        }
 
-        return new ResponseProvider(response, this.dao.buscarFiltro(from, to, contaId));
+
+
+        return new ResponseProvider(response, this.dao.buscarFiltro(query));
     }
 
     cadastrar(request: Request, response: Response) {
@@ -54,16 +59,38 @@ export class HistoricoService {
 
         this.buscarHistorico(response, id, (historico: Historico) => {
             historico.setStatus(status);
-            
-            this.dao.save(historico).then((historico) => {
 
-                response.status(200);
-                response.json(historico);
+            //mudando o saldo da conta de acordo com status do historico
+            this.contaDao.buscar(historico.getContaId()).then((objConta) => {
+                let conta: Conta = <Conta>ObjectConverter.fromJson(new Conta(), objConta);
 
-            }).catch((error: any) => {
-                response.status(400).json(error);
+                if (status === 'P') {
+                    conta.efetivarDebitoOuCredito(historico.getValor());
+                }
+
+                else if (status === 'A') {
+                    conta.devolverDebitoOuCredito(historico.getValor());
+                }
+
+                else {
+                    response.status(400).json({'message': 'Opçao de status não é válido'});
+                    return ;
+                }
+
+                //salvando historico
+                this.dao.save(historico).then((historico) => {
+                    //salvando novo saldo
+                    this.contaDao.save(conta).then(() => {});
+
+                    response.status(200);
+                    response.json(historico);
+
+                }).catch((error: any) => {
+                    response.status(400).json(error);
+                });
+
+
             });
-
         });
 
     }

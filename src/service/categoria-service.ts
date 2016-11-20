@@ -76,7 +76,7 @@ export class CategoriaService {
 
                 this.dao.deletar(id).then((result: any) => {
                     response.status(200).send();
-                });
+                }).catch(error => response.status(500).json(error));
             });
     }
 }
