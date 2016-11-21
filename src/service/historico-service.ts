@@ -38,7 +38,7 @@ export class HistoricoService {
         delete body.id;
 
         //no cadastro o body.status sempre é A
-        delete body.status;
+        body.status = 'A';
 
         let categoria = <Historico> ObjectConverter.fromJson(new Historico(), body);
 
