@@ -38,6 +38,8 @@ app.route(baseUri('categorias/:id'))
     .put((req, res) => categoriaService.atualizar(req, res))
     .delete((req, res) => categoriaService.deletar(req, res));
 
+app.route(baseUri('status-pagamentos'))
+    .get((req, res) => categoriaService.statusPagamentos(req, res));
 
 //contas
 app.route(baseUri('contas'))

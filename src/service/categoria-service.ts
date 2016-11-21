@@ -12,6 +12,11 @@ export class CategoriaService {
         this.dao = categoriaDao;
     }
 
+    statusPagamentos(request: Request, response: Response) {
+        let query = request.query;
+        return new ResponseProvider(response, this.dao.getStatusPagamentos(query));
+    }
+
     todas(request: Request, response: Response) {
         return new ResponseProvider(response, this.dao.todas);
     }

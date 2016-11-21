@@ -8,7 +8,7 @@ export abstract class AbstractDao {
     buscar(id: number) {
 
         return new Promise( (resolve, reject) => {
-            this.find(this._tableName, id).then((results: Array<any>) => { 
+            this.find(this._tableName, id).then((results: Array<any>) => {
                 let result = results.length > 0 ? results.shift() : {};
                 resolve(result);
 
@@ -16,7 +16,7 @@ export abstract class AbstractDao {
                 reject(error);
             });
         });
-        
+
     }
 
     deletar(id: number) {
@@ -63,6 +63,9 @@ export abstract class AbstractDao {
     }
 
     protected query(sql: string, params?: Object, conversor?: Function) {
+        console.log(sql);
+        console.log(params);
+
         return new Promise( (resolve, reject) => {
             let options = {
                 sql: sql,
@@ -70,7 +73,7 @@ export abstract class AbstractDao {
 
             let rows: Array<any> = [];
             this.conn.query(options, params)
-                .on('error', (error) => reject(error))
+                .on('error', (error) => reject({error: error, stack: error.stack}))
                 .on('result', (row, index) => {
                     if (conversor) {
                         rows.push(conversor(row));
