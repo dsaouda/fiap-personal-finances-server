@@ -16,6 +16,14 @@ export class HistoricoService {
         this.contaDao = contaDao;
     }
 
+    importar(request: any, response: Response) {
+        console.log(request.files);
+        console.log(request.file);
+        
+        console.log(request);
+        response.status(200).json();
+    }
+
     todos(request: Request, response: Response) {
 
         let query = request.query;

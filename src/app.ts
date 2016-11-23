@@ -56,6 +56,9 @@ app.route(baseUri('historicos'))
     .get((req, res) => historicoService.todos(req, res))
     .post((req, res) => historicoService.cadastrar(req, res));
 
+app.route(baseUri('historicos/importar'))    
+    .post((req, res) => historicoService.importar(req, res));    
+
 app.route(baseUri('historicos/:id'))
     .get((req, res) => historicoService.buscar(req, res))
     .put((req, res) => historicoService.atualizar(req, res))
