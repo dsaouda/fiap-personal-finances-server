@@ -5,6 +5,9 @@ import * as bodyParser from 'body-parser';
 import {categoriaService} from './factory/categoria-service-factory';
 import {contaService} from './factory/conta-service-factory';
 import {historicoService} from './factory/historico-service-factory';
+import * as multer from 'multer';
+import * as logger from 'morgan';
+
 let cors = require('cors')
 
 let port = process.env.EXPRESS_PORT || 3000;
@@ -14,15 +17,11 @@ let baseUri = (uri: string): string => {
     return `/api/v1/${uri}`;
 };
 
+app.use(logger('dev'));
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-    console.log(req.originalUrl);
-    console.log('requisição', Date.now());
-    next();
-});
 
 //categorias
 app.route(baseUri('categorias'))
@@ -56,8 +55,10 @@ app.route(baseUri('historicos'))
     .get((req, res) => historicoService.todos(req, res))
     .post((req, res) => historicoService.cadastrar(req, res));
 
-app.route(baseUri('historicos/importar'))    
-    .post((req, res) => historicoService.importar(req, res));    
+let storage = multer.memoryStorage()
+let upload = multer({ storage: storage })
+
+app.post(baseUri('historicos/importar'), upload.any(), (req, res, next) => historicoService.importar(req, res));    
 
 app.route(baseUri('historicos/:id'))
     .get((req, res) => historicoService.buscar(req, res))

@@ -63,9 +63,6 @@ export abstract class AbstractDao {
     }
 
     protected query(sql: string, params?: Object, conversor?: Function) {
-        console.log(sql);
-        console.log(params);
-
         return new Promise( (resolve, reject) => {
             let options = {
                 sql: sql,
@@ -121,10 +118,6 @@ export abstract class AbstractDao {
     }
 
     private execute(sql: string, object: any) {
-        console.log(sql);
-        console.log(object);
-        console.log("\n\n");
-
         return new Promise( (resolve, reject) => {
             this.conn.query(sql, object, (error, result) => {
                 if (error) {

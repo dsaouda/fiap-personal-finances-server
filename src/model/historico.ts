@@ -27,6 +27,14 @@ export class Historico  {
         return this.valor;
     }
 
+    getDocto(): string {
+        return this.docto;
+    }
+
+    getDataMovimento(): string {
+        return this.data_movimento;
+    }
+
     setId(id: number): this {
        this.id = Number(id);
         return this;

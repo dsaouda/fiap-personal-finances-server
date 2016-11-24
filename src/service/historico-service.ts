@@ -6,6 +6,7 @@ import {ResponseProvider} from '../util/response-provider';
 import {Request, Response} from 'express';
 import {ObjectConverter} from '../util/object-converter';
 import {Uri} from '../util/uri';
+let Banking = require('banking');
 
 export class HistoricoService {
     private dao: HistoricoDao;
@@ -17,11 +18,42 @@ export class HistoricoService {
     }
 
     importar(request: any, response: Response) {
-        console.log(request.files);
-        console.log(request.file);
+        let files = request.files;
+        if (files.length === 0) {
+            response.status(400).send('Não foi recebido arquivos');
+        }
         
-        console.log(request);
-        response.status(200).json();
+        let file = files[0];
+        let contaId = request.body.conta_id;
+        
+        Banking.parse(file.buffer.toString(), (res) => {
+            if (res.body.OFX == 'undefined') {
+                response.status(400).send('Formato do arquivo não é válido!');
+                return ;
+            }
+
+            let historicos = res.body.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN
+            
+            historicos = historicos.map((r) => {
+                let values = r.FITID.split(':');                
+                let date = r.DTPOSTED;
+                
+                let historico = new Historico();
+                historico
+                    .setContaId(contaId)
+                    .setDocto(r.CHECKNUM)
+                    .setDataMovimento(`${date.substr(0,4)}-${date.substr(4,2)}-${date.substr(6,2)}`)
+                    .setValor(values[2].trim())
+                    .setDocto(values[3].trim())
+                    .setDescricao(values[4].trim())
+                    .setObservacao(values[5].trim());
+
+                this.dao.save(historico);
+                return historico;
+            });
+            
+            response.status(200).send(); 
+        });
     }
 
     todos(request: Request, response: Response) {
@@ -35,8 +67,6 @@ export class HistoricoService {
             response.status(400).json("Informe um filtro");
             return ;
         }
-
-
 
         return new ResponseProvider(response, this.dao.buscarFiltro(query));
     }

@@ -6,6 +6,35 @@ import {DateConverter} from '../util/date-converter';
 export class HistoricoDao extends AbstractDao {
     protected _tableName = 'historico';
 
+    save(historico: Historico) {
+        let params = {
+            docto: historico.getDocto(),
+            data_movimento: historico.getDataMovimento()
+        };
+
+        if (historico.getId()) {
+            return super.save(historico);
+        }    
+
+        return new Promise((resolve, reject) => {
+            
+            this.conn.query('SELECT count(*) total FROM historico WHERE docto = :docto AND data_movimento = :data_movimento', params, (error, result) => {
+
+                if (error) {
+                    reject(error);
+                    return ;                    
+                }
+
+                if (result[0].total > 0) {
+                    resolve({"message": "Histórico já cadastrado"});
+                    return ;
+                }
+
+                super.save(historico).then(h => resolve(h)).catch(error => reject(error));                
+            });
+        });
+    }
+
     get todos() {
         let conversor = (row) => ObjectConverter.fromJson(new Historico(), row);
         return this.query('SELECT * FROM historico', null, conversor);
