@@ -1,7 +1,7 @@
 ## fiap-personal-finances-server
 Trabalho finalização de módulo Técnicas de Design Responsive Web aplicando Design Thinking.
 
-## Instalação do MYSQL (Ubuntu)
+## Instalação do MYSQL (Debian/Ubuntu)
 
 ```bash
 apt-get install mysql-server
