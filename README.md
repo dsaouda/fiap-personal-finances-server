@@ -1,13 +1,6 @@
 ## fiap-personal-finances-server
 Trabalho finalização de módulo Técnicas de Design Responsive Web aplicando Design Thinking.
 
-## Passos
-
- * [Instalação do MYSQL](mysql)
- * [Import database do projeto](import)
- * [Instalação projeto](projeto)
- * [Configurações](config)
-
 ## Instalação do MYSQL (Ubuntu)
 
 ```bash
@@ -26,9 +19,10 @@ mysql -uroot -p -D gastos < db/database.sql
 ## Instalação projeto
 
 ```bash
-npm install -g angular-cli
+npm install
 ```
 
 ## Configurações
 
-
+Você precisará copiar o contéudo do arquivo **.env.js.dist** (template de configuração) e colar em um arquivo chamado **.env.js**
+Feito você precisará informar dados do banco de dados e seu domínio. O arquivo contém explicações de como deve ser configurado.
