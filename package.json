@@ -26,6 +26,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lite": "lite-server",
     "tsc:w": "tsc -w",
+    "build": "tsc",	
     "start": "npm run tsc:w",
     "serve": "node dist/app.js",
     "typings": "typings"

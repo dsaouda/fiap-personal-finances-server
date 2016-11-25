@@ -22,6 +22,11 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+app.get(baseUri('/'), (req, res) => {
+
+	res.status(200).send('seja bem vindo');	
+
+});
 
 //categorias
 app.route(baseUri('categorias'))
