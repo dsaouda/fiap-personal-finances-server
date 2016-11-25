@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: 17/11/2016 às 17:56
+-- Tempo de Geração: 25/11/2016 às 12:59
 -- Versão do servidor: 5.6.28-0ubuntu0.14.04.1
 -- Versão do PHP: 5.5.9-1ubuntu4.17
 
@@ -36,14 +36,6 @@ CREATE TABLE IF NOT EXISTS `categoria` (
   KEY `recorrente` (`recorrente`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- Fazendo dump de dados para tabela `categoria`
---
-
-INSERT INTO `categoria` (`id`, `nome`, `descricao`, `recorrente`, `icone`) VALUES
-(1, 'Alimentação', 'Gastos com almoço, janta, café ...', 0, NULL),
-(2, 'Casa / Luz', 'Luz', 1, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -58,13 +50,6 @@ CREATE TABLE IF NOT EXISTS `conta` (
   `cor` char(15) DEFAULT NULL COMMENT 'Cor de identificação da conta',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Fazendo dump de dados para tabela `conta`
---
-
-INSERT INTO `conta` (`id`, `nome`, `descricao`, `saldo`, `cor`) VALUES
-(1, 'Bradesco - 0105/0247294-5', 'Agência na paulista', '100.00', '#FF3232');
 
 -- --------------------------------------------------------
 
@@ -84,18 +69,21 @@ CREATE TABLE IF NOT EXISTS `historico` (
   `valor` decimal(9,2) NOT NULL,
   `status` enum('P','A') NOT NULL DEFAULT 'A',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `docto` (`docto`,`data_movimento`,`valor`),
+  UNIQUE KEY `docto` (`docto`,`data_movimento`),
   KEY `conta_id` (`conta_id`),
   KEY `categoria_id` (`categoria_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Fazendo dump de dados para tabela `historico`
+-- Restrições para dumps de tabelas
 --
 
-INSERT INTO `historico` (`id`, `conta_id`, `categoria_id`, `docto`, `data_movimento`, `data_vencimento`, `descricao`, `observacao`, `valor`, `status`) VALUES
-(1, 1, 1, '123', '2016-11-17', '2016-11-16', 'Descrição', 'Observaçao', '100.00', 'A'),
-(2, 1, 1, '123', '2016-11-17', '2016-11-16', 'Descrição 2', 'Observaçao 2', '1000.00', 'A');
+--
+-- Restrições para tabelas `historico`
+--
+ALTER TABLE `historico`
+  ADD CONSTRAINT `historico_ibfk_1` FOREIGN KEY (`conta_id`) REFERENCES `conta` (`id`),
+  ADD CONSTRAINT `historico_ibfk_2` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
